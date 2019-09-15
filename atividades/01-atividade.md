@@ -195,4 +195,10 @@ Com isso o IIS está acessível, para testar, vá até o painel da VM e copie o 
 
 ![IIS](../imagens/firewall3.png)
 
+#### Dica
+
+Habilitar o desligamento da VM para que mesmo esquecendo de desligá-la após o uso, ela se desligue automaticamente interrompendo a cobrança do tempo de processamento. Para habilitar o recurso, ir até a seção **Operações** do menu do VM e clicar na opção **Desligamento automático**, e habilitar o desligamento, configurar o horário e o fuso horário.
+
+![desligamento](../imagens/desligamento.png)
+
 Próxima atividade: [Atividade 02](02-atividade.md)
