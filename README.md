@@ -1,6 +1,6 @@
 # Hands-On-AzureDevOps
 
-Hands-On para introdução do Azure DevOps e sua utilização com o Genexus.
+Hands-On para introdução do Azure DevOps e sua utilização com o Genexus ou ASP.NET Core.
 
 Para este Hands-On vamos utilizar o Azure para criar os ambientes de testes e o Azure DevOps para implementar os processos de build e release. 
 

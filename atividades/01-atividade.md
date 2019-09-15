@@ -1,6 +1,6 @@
 # Atividade 01
 
-Criação do grupo de recursos, criação da máquina virtual com SQL Server e configuração da aplicação Genexus.
+Criação do grupo de recursos, criação da máquina virtual com SQL Server e configuração da aplicação Genexus/ASP.NET Core.
 
 ## Criação do grupo de recursos
 
@@ -44,7 +44,7 @@ Preencher o campo **Nome da máquina virtual** com o texto **servidorweb**. E cl
 
 ![VM](../imagens/vm4.png)
 
-Selecionar o tamanho **D2_v3** que é uma VM com 2 cores e 8 GB de RAM. Clicar em **Selecionar** para confirmar a seleção.
+Selecionar o tamanho **D2_v3** que é uma VM com 2 cores e 8 GB de RAM, clicar em **Limpar todos os filtros** para que o item apareça na lista de seleção. Clicar em **Selecionar** para confirmar a seleção.
 
 ![VM](../imagens/vm5.png)
 
