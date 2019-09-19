@@ -8,88 +8,92 @@ Criaremos um pipeline que buscará os arquivos no repositório do Azure Repos, f
 
 Acessar o Azure DevOps e abrir o projeto HandsOnDevOpsNETCore. Clicar na opção **Pipelines**, clicar em **Builds** e depois na opção **New pipeline**.
 
-![new pipeline](../imagens/build1.png)
+![new pipeline](../imagens/buildcore1.png)
 
-Clicar em **Use the classic editor**, a opção usando o editor clássico é mais amigável, no entanto será importante para implementações mais elaboradas a utilização da configuração utilizando YAML.
+Clicar em **Azure Repos Git YAML**.
 
-![classic editor](../imagens/build2.png)
+![classic editor](../imagens/buildcore2.png)
 
-Selecione o **Azure Repos Git** como source, deixe os valores padrões selecionados e clique em **Continue**.
+Clique em **HandsOnDevOpsNETCore**.
 
-![source](../imagens/build3.png)
+![source](../imagens/buildcore3.png)
 
-Clicar em **Empty job**.
+Clique em **Show more**.
 
-![empty job](../imagens/build4.png)
+![Show more](../imagens/buildcore4.png)
 
-Selecionar o pool **Default** na opção **Agent pool**.
+Selecionar o item **ASP.NET Core**.
 
-![agent pool](../imagens/build5.png)
+![ASP.NET Core](../imagens/buildcore5.png)
 
-Adicionar uma task no item do **Agent job 1** clicando no sinal de **+**.
-No campo de pesquisa digitar **zip** para que as task de compressão sejam pesquisadas.
-Selecionar o item **Archive files** clicando nele.
+Clicar em **Save and run**.
 
-![adicionar task](../imagens/build6.png)
+![Save and run](../imagens/buildcore6.png)
 
-Confirmar a seleção clicando em **Add**.
+Deixar o item **Commit directly to the master branch.** selecionado e clicar novamente em **Save and run**.
 
-![add task](../imagens/build7.png)
+![Save and run](../imagens/buildcore7.png)
 
-Editar as propriedades.
+O processamento irá gerar um erro devido ao fato da ausência do SDK .NET Core compatível com o projeto.
 
-| Campo | Valor | 
-| --- | --- |
-| Display name | Archive web |
-| Root folder or file to archive | web |
-| Archive file to create | $(Build.ArtifactStagingDirectory)/web.zip |
+![erro](../imagens/buildcore8.png)
 
-E setar o checkbox da propriedade **Force verbose output** para podermos visualizar a execução do comando.
+Clicar no item **Builds** do menu lateral e clicar em **Edit**.
 
-![zip task](../imagens/build8.png)
+![builds](../imagens/buildcore9.png)
 
-O Azure Pipelines tem uma lista de variáveis pre definidas que podem ser usadas nas tarefas de build e release. Neste caso estamos usando a variável **$(Build.ArtifactStagingDirectory)** para identificar o diretório local onde o agente procura os artefatos a serem publicados.
+No campo de pesquisa digitar **Use .NET** e selecione o item **Use .NET Core**.
 
-- [Lista de variáveis pre definidas do Azure DevOps](https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&viewFallbackFrom=azure-devop&tabs=yaml)
+![Use .NET](../imagens/buildcore10.png)
 
-Adicionar agora a task que irá subir o artefato para o Azure Pipelines, clicar no sinal de **+** do item **Agent Job 1**.
-Digitar **publish** no campo de pesquisa e selecionar o item **Publish build artifacts**. E clicarm em **Add** para confirmar.
+No campo **Version** informar **3.0.100-rc1-014190**, acrescente linhas abaixo do texto **steps**, posicione o cursor como na imagem e clicar me **Add**.
 
-![publish](../imagens/build9.png)
+![sdk version](../imagens/buildcore11.png)
 
-Não é necessário fazer nenhuma configuração nessa tarefa, pois ela irá pegar o arquivo gerado no diretório **$(Build.ArtifactStagingDirectory)** e subir para o Azure Pipelines.
+Clicar em **Save** e novamente em **Save** na próxima tela.
 
-![publish](../imagens/build10.png)
+![salvar](../imagens/buildcore12.png)
 
-Agora vamos salvar e executar o build, para clique em **Save & queue**. E confirme na tela seguinte clicando em **Save and run**.
+Como a trigger de push de codigo está ativo, o build vai ser disparado ao salvar o a configuração do pipeline. Clicar em **Builds** e depois no pipeline para ver os detalhes.
 
-![save](../imagens/build11.png)
+![build 2](../imagens/buildcore13.png)
 
-![save](../imagens/build12.png)
+Clique em **Summary**.
 
-O Azure Pipelines irá mostrar o log de processamento e o resultado. Clicando em **Artifacts** podemos realizar o download do arquivo **web.zip**.
+![Summary](../imagens/buildcore14.png)
 
-![save](../imagens/build13.png)
+Veja que nenhum artefato foi gerado pelo Build, isso ocorreu porque está faltando uma tarefa após o build para fazer upload dos artefatos gerados. 
 
-Para ver o log detalhado de um item, clicar no item.
+![sem artefato](../imagens/buildcore15.png)
 
-![log](../imagens/build14.png)
+Clique em **Builds** e depois em **Edit** para abrirmos o pipeline para edição, vamos incluir uma task para realizar o publish do .NET Core e gerar um zip, e a uma task para fazer o upload do zip gerado.
+Adicionar o código abaixo no final do pipeline e salvar o yaml.
 
-![log](../imagens/build15.png)
+```yaml
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory) --self-contained --runtime win10-x64'
+    zipAfterPublish: True
 
-Vamos habilitar a integração contínua para que quando um push for realizado no Azure Repos configurado no Pipeline de Build, o pipeline de build será executado automaticamente.
-Clicar na opção **Trigger**.
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+```
 
-![triggers](../imagens/build16.png)
+![publish](../imagens/buildcore16.png)
 
-Selecionar o checkbox **Enable continuous integration**.
+Clicar em **Builds** e no item em execução para acompanhar o build. No final do processo será possível verificar que desta vez o artefato foi gerado.
 
-![triggers](../imagens/build17.png)
+![artefato](../imagens/buildcore17.png)
 
-E salvar o pipeline.
+Clique em **Artifacts** e clique em **Drop** para realizar o download do zip, e veja que os arquivos da aplicação estão dentro do zip.
 
-![triggers](../imagens/build18.png)
+![drop](../imagens/buildcore18.png)
 
-
+![drop](../imagens/buildcore19.png)
 
 Próxima atividade: [Atividade 06](06-atividade.md)
