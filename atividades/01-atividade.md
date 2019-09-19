@@ -149,6 +149,8 @@ Para realizar o download do SQL Server 2016 Express e o  SQL Management, abrir o
 
 ![IIS](../imagens/sqliis18.png)
 
+**Nota: Se o link do SQL Management baixar o arquivo em português não vai funcionar, então entrar na  pagina https://docs.microsoft.com/pt-br/sql/ssms/release-notes-ssms?view=sql-server-2017#downloadssdtmediadownloadpng-ssms-1791httpsgomicrosoftcomfwlinklinkid2043154clcid0x409 e selecionar o item English (United States).
+
 Executar o setup do SQL Server clicando no SQLEXPR_X64_ENU.exe. Selecione a opção **New SQL Server ...** 
 
 ![IIS](../imagens/sqliis19.png)

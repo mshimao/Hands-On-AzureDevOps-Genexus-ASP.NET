@@ -61,7 +61,6 @@ Será gerado um arquivo zip com os programas da aplicação.
 
 Conectar na VM do Azure usando o arquivo RDP, crie uma pasta temp no c:\ e copiar os arquivos de zip gerados.
 
-
 ### Configuração do ambiente
 
 Vamos configurar as variáveis de ambiente para informar aos programas genexus os dados de conexão ao banco de dados. Mais informações sobre como o Genexus usa variáveis de ambiente no link abaixo:
