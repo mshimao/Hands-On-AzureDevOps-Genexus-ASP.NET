@@ -205,6 +205,18 @@ No browser digitar a url **https://localhost:5001/api/todo**.
 
 ![webapi get](../imagens/dotnet15.png)
 
+Vamos alterar o projeto para que seja possível a aplicação pegar a string de conexão de variáveis de ambiente. Editar o arquivo **Startup.cs** e alterar o método **Startup** como o código abaixo:
+
+```csharp
+        public Startup()
+        {
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json");
+            builder.AddEnvironmentVariables();
+            Configuration = builder.Build();
+        }
+```
+
 Vamos criar o script do migrations, para isso execute o comando abaixo no terminal do VS Code:
 
 ```bash
@@ -226,6 +238,8 @@ dotnet publish -c Release --self-contained --runtime win10-x64
 Na pasta **bin\Release\netcoreapp3.0\win10-x64** estão os arquivos para publicação, zipar a pasta.
 
 ![pasta](../imagens/dotnet18.png)
+
+### Configuração do ambiente
 
 Conectar na VM do Azure usando o arquivo RDP, crie uma pasta temp no c:\ e copiar o arquivo zip e o script **create.sql**.
 
@@ -263,9 +277,33 @@ Descompactar o zip e copiar os arquivos para a pasta **c:\inetpub\wwwroot**.
 
 ![arquivos](../imagens/dotnet27.png)
 
-Editar o arquivo **appsettings.json** para acertar a string de conexão.
+No Explorer, clicar com o botão direito do mouse no Computer e selecionar a opção **Properties**.
 
-![string conn](../imagens/dotnet28.png)
+![computer properties](../imagens/Envvar1.png)
+
+Clicar na opção **Advanced system settings**.
+
+![Advanced System Settings](../imagens/Envvar2.png)
+
+Clicar em **Environment Variables**.
+
+![Env Var](../imagens/Envvar3.png)
+
+Vamos criar as varíaveis de ambiente clicando em **New** na seção **System Variables**.
+
+![Sys Var](../imagens/Envvar4.png)
+
+Criar a seguinte variável:
+
+| Variável de ambiente | Valor |
+| --- | --- |
+| ConnectionString__TodoDB  | server=.\SQLEXPRESS;database=TodoDB;User ID=sa;password=sa!2016;  |
+
+![Sys Var 2](../imagens/envvarcore1.png)
+
+Reiniciar a VM para que o IIS reconheça as variáveis de ambiente que foram configuradas.
+
+![Reiniciar VM](../imagens/Envvar12.png)
 
 Copie o IP público da VM do portal do Azure e digite a url **http://{IP Público}/api/todo** para testar a API. 
 
@@ -275,5 +313,7 @@ Copie o IP público da VM do portal do Azure e digite a url **http://{IP Públic
 - [Comandos do dotnet ef](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet#common-options)
 
 - [Atividade baseada no Tutorial: Criar uma API Web com o ASP.NET Core - Microsoft](https://docs.microsoft.com/pt-br/aspnet/core/tutorials/first-web-api?view=aspnetcore-2.2&tabs=visual-studio-code)
+
+- [EF Core & ASP.NET Core: Read Connections Strings & Config Values from Environment Variables](https://www.benday.com/2017/12/20/ef-core-asp-net-core-read-connections-strings-from-environment-variables/)
 
 Próxima atividade: [Atividade 03](03-atividade.md)
