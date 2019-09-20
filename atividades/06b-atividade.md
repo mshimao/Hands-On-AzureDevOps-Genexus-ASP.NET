@@ -137,6 +137,8 @@ Podemos ver o log clicando no texto **Succeeded**.
 
 ![release1](../imagens/release19.png)
 
+Faça alguma alteração na tela, execute os comandos git e verifique se o Build e Release executam corretamente e veja a alteração publicada.
+
 Próxima atividade: [Atividade 07](07-atividade.md)
 
 
